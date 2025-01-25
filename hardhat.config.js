@@ -1,7 +1,7 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config();
 
-const { MANTLE_SEPOLIA_URL, PRIVATE_KEY, MANTLERSCAN_KEY } = process.env;
+const { MANTLE_SEPOLIA_URL, PRIVATE_KEY, MANTLESCAN_KEY } = process.env;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 (
@@ -14,7 +14,7 @@ const { MANTLE_SEPOLIA_URL, PRIVATE_KEY, MANTLERSCAN_KEY } = process.env;
       },
     },
     etherscan: {
-      apiKey: MANTLERSCAN_KEY || "",
+      apiKey: MANTLESCAN_KEY || "",
     },
   }
 );

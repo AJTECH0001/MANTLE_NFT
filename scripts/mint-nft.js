@@ -1,36 +1,44 @@
 require("dotenv").config();
-const { JsonRpcProvider, Signer } = require("@ethersproject/providers");
-const ethers = require("ethers");
+const { ethers } = require("ethers");
+
+// Load environment variables
+const rpcUrl = process.env.MANTLE_SEPOLIA_URL; // Match the hardhat.config.js
+const chainId = 5003; // Sepolia Testnet chain ID
+const privateKey = process.env.PRIVATE_KEY;
+
+// Ensure the environment variables are defined
+if (!rpcUrl || !privateKey) {
+  console.error("Please define MANTLE_SEPOLIA_URL and PRIVATE_KEY in your .env file");
+  process.exit(1);
+}
 
 // Create a JsonRpcProvider instance
-const rpcUrl = "https://rpc.testnet.mantle.xyz";
-const chainId = 5001;
-const provider = new JsonRpcProvider(rpcUrl, chainId);
+const provider = new ethers.JsonRpcProvider(rpcUrl, chainId);
 
-// Create a signer using the private key from the environment variable
-const privateKey = process.env.SECRET_KEY;
+// Create a signer using the private key
 const signer = new ethers.Wallet(privateKey, provider);
 
 // Get contract ABI and address
-const abi = require("../artifacts/contracts/MyNFT.sol/MyNFT.json").abi;
-const contractAddress = "0xe43e44f3f538Ad10292C5FBE52542aB0D7740599";
+const abi = require("../ignition/deployments/chain-5003/artifacts/MyNFTModule#MyNFT.json").abi;
+const contractAddress = "0x954Da409811bf70f7d5cDEC7392acd6B9aC7cF32";
 
 // Create a contract instance
 const myNftContract = new ethers.Contract(contractAddress, abi, signer);
 
-// Get the NFT Metadata IPFS URL
-const tokenUri = "https://gateway.pinata.cloud/ipfs/bafkreiggjzyc5i6kmr2zpcsxez6a3ffpzkaylymtdwtbrcblzq7v6o5vhe";
+// Define the NFT Metadata IPFS URL
+const tokenUri = "https://gateway.pinata.cloud/ipfs/bafkreiddardzbq6vpcki2nesssxbmev55yutjb2ko5f6rkyaudyc7cue4a";
 
-// Call mintNFT function
+// Function to mint the NFT
 async function mintNFT() {
-  let nftTxn = await myNftContract.mintNFT(signer.address, tokenUri);
-  await nftTxn.wait();
-  console.log(`NFT Minted! Check it out at: https://explorer.testnet.mantle.xyz/tx/${nftTxn.hash}`);
+  try {
+    console.log("Minting NFT...");
+    const nftTxn = await myNftContract.mintNFT(signer.address, tokenUri);
+    console.log("Transaction submitted. Waiting for confirmation...");
+    await nftTxn.wait(); // Wait for the transaction to be mined
+    console.log(`NFT Minted! Check it out at: https://explorer.testnet.mantle.xyz/tx/${nftTxn.hash}`);
+  } catch (error) {
+    console.error("Error minting NFT:", error.message);
+  }
 }
 
-mintNFT()
-  .then(() => process.exit(0))
-  .catch(error => {
-    console.error(error);
-    process.exit(1);
-  });
+mintNFT();
