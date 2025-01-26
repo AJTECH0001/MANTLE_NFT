@@ -225,6 +225,6 @@ Minting NFT...
 Transaction submitted. Waiting for confirmation...
 NFT Minted! Check it out at: https://explorer.testnet.mantle.xyz/tx/0xf0ee9a094c4af94c8aa2d023fbb73419bcd4728e332db803d74bd6df1f3fbe44
 
-You can check out your NFT mint on Etherscan by following the URL above.
+You can check out your NFT mint on Mantlescan by following the URL above.
 
 Congrats! 🎉 ✨ You’ve minted your first NFT!
