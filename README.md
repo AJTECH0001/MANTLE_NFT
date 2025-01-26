@@ -1,84 +1,70 @@
 # How to Create an NFT on Mantle 
 
-This tutorial will walk you through writing and deploying a non-fungible (ERC-721) token smart contract using Hardhat and ethers.js!
+This tutorial walks you through writing and deploying a non-fungible token (ERC-721) smart contract using Hardhat and ethers.js.
 
-With the popularity of NFTs bringing blockchain technology to the forefront of public attention, there is no better time than now to gain a firsthand understanding of the excitement. You can do this by creating and publishing your very own NFT (ERC-721 token) on the Mantle Testnet.
+With the growing popularity of NFTs bringing blockchain technology to the forefront, there’s no better time to gain hands-on experience. In this guide, you’ll learn how to create and publish your very own NFT (ERC-721 token) on the Mantle Testnet.
 
-we will walk through creating and deploying an ERC-721 smart contract on Mantle Testnet using MetaMask, Solidity, Hardhat and Pinata.
+We’ll cover the following:
+
+- Creating and deploying an ERC-721 smart contract.
+- Using tools like MetaMask, Solidity, Hardhat, and Pinata.
 
 # Creating an NFT
 
 ## Prerequisites
 
-Before you begin the steps in this tutorial, please ensure that you have completed the following steps:
+Before starting, ensure you have:
 
-Install both Node.js (>14) and npm on your local machine. To check your Node version, run the following command in your terminal:
-
+- Node.js (version >14) and npm installed on your machine. To verify your Node version, run:
 ```
 node -v
 ```
 
-## Create a Node Project
-Create a new directory for your project and navigate into it. Then, initialize a new Node project by
+## Step 1: Create a Node Project
+Create a directory for your project and navigate into it
 
 ```
 mkdir my-nft && cd my-nft
 npm init -y
 ```
+Initialize a new Node.js project:
+```
+npm init -y
+```
 
-## Create a Hardhat Project
-Hardhat is a development environment to compile, deploy, test, and debug smart contracts. It helps developers create dApps locally before deploying them to a live chain.
 
-In your terminal, run the following commands:
+
+## Step 2: Set Up a Hardhat Project
+Hardhat is a development environment for compiling, deploying, testing, and debugging smart contracts.
+- Install Hardhat:
 ```
 npm install --save-dev hardhat
+```
+- Initialize Hardhat:
+```
 npx hardhat
 ```
-
-You should then see a welcome message and options on what you can do. Use your “arrow keys” to navigate the small menu and Select Create a JavaScript project by clicking “Enter”.
-
-Agree to all the prompts (project root, adding a .gitignore, and installing all sample project dependencies).
-
-Now that we’re done with setting up Hardhat, let’s check if everything works properly.
-
+- Select "Create a JavaScript project" and agree to all prompts (e.g., adding a .gitignore file and installing dependencies).
+- Test your setup:
 ```
 npx hardhat test
 ```
 
-## Install OpenZeppelin Contracts Package
-We now have our hardhat development environment successfully configured. Let us now install the OpenZeppelin contracts package. This will give us access to ERC-721 implementations (one of the standards for NFTs alongside ERC-1155), on top of which we will build our contract.
+
+## Step 3: Install OpenZeppelin Contracts
+OpenZeppelin provides implementations of common smart contract standards like ERC-721.
+
+- Install the package:
 
 ```
 npm install @openzeppelin/contracts
 ```
+- Note: Ignore any security vulnerability warnings if they don't affect contract deployment.
 
-Note: You might encounter some alerts about vulnerabilities like in the screenshot below, please ignore them as they aren’t affecting our deployment of the contract.
 
-```
-PS C:\Users\alade\OneDrive\Desktop\MANTLE_NFT> npm install @openzeppelin/contracts
-
-up to date, audited 577 packages in 16s
-
-98 packages are looking for funding
-  run `npm fund` for details
-
-29 vulnerabilities (25 low, 4 high)
-
-To address issues that do not require attention, run:
-  npm audit fix
-
-Some issues need review, and may require choosing
-a different dependency.
-
-Run `npm audit` for details.
-```
-
-## Open the OpenZeppelin Contracts Package
-Open the project with a project of your liking (e.g. VSCode). Note to open the project and navigate to the folder where the project was created in the first step.
-
-For example, on Mac, we will use a language called Solidity to write our contract.
-
-Navigate to the contracts folder and create a new file called MyNFT.sol. Add the following code to the file.
+## Step 4: Write the Smart Contract
+- Navigate to the contracts folder and create a new file named MyNFT.sol.
+- Add the following code:
 
 ```
 // SPDX-License-Identifier: MIT
@@ -108,57 +94,19 @@ contract MyNFT is ERC721URIStorage, Ownable {
 }
 ```
 
-Make sure that the version defined above (0.8.20) is the same as the version defined in the hardhat.config.js file.
+Ensure the Solidity version (^0.8.20) matches the version in hardhat.config.js.
 
-Now, Let’s break down the code line by line. In MyNFT.sol, our code inherits two OpenZepplin smart contract classes:
-
-@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol contains the implementation of the ERC-721 standard, which our NFT smart contract will inherit. (To be a valid NFT, your smart contract must implement all the methods of the ERC-721 standard.)
-
-@openzeppelin/contracts/access/Ownable.sol sets up access control on our smart contract, so only the owner of the smart contract (you) can mint NFTs.
-Then we have our custom NFT smart contract, which is surprisingly short — it only contains a counter, a constructor, and a single function!
-
-This is thanks to our inherited Open Zeppelin contracts, which implement most of the methods we need to create an NFT, such as ownerOf (returns the owner of the NFT) and transferFrom (transfers ownership of the NFT).
-
-You’ll also notice we pass 2 strings, “MyNFT” and “NFT” into the ERC-721 constructor. The first variable is the smart contract’s name, and the second is its symbol. You can name each of these variables whatever you wish!
-
-Finally, starting on we have our function mintNFT() that allows us to mint an NFT! You’ll notice this function takes in two variables:
-
-address recipient specifies the address that will receive your freshly minted NFT
-
-string memory tokenURI is a string that should resolve to a JSON document that describes the NFT’s metadata.
-
-An NFT’s metadata is really what brings it to life, allowing it to have additional properties, such as a name, description, image, and other attributes. In Part II of this tutorial, we will describe how to configure this metadata.
-
-Lastly, mintNFT calls some methods from the inherited ERC-721 library, and ultimately returns a number that represents the ID of the freshly minted NFT.
-
-## Connect MetaMask & Mantle to Your Project
-
-Now that we’ve created a MetaMask wallet and a smart contract, it’s time to connect both with Mantle Testnet.
-
-Every transaction sent from your virtual wallet requires a signature using your unique private key. To provide our program with this permission, we can safely store our private key in an environmental file.
-
-Install the dotenv package in your project directory by running.
-
+## Step 5: Update the Hardhat Configuration
+- Install `dotenv` for managing environment variables:
 ```
 npm install dotenv --save
 ```
-
-Then, create a .env file in the root directory (Main Folder) of your project, and add your MetaMask private key.
-
-Note: The file name should be “.env” only, not “xyz.env” or “abc.env”
-
-Your .env should look like this:
+- Create a .env file in the root directory and add your MetaMask private key:
 ```
-PRIVATE_KEY = 0x"your exported private key"
+  PRIVATE_KEY=your_exported_private_key
 ```
+- Update `hardhat.config.js` with the following:
 
-Note: make sure to replace your exported private key with “your exported private key”.
-
-## Update hardhat.config.js
-
-We’ve added several dependencies and plugins so far. Now we need to update hardhat.config.js, so that your project knows about all of them.
-
-Replace the contents of hardhat.config.js with the following:
 
 ```
 require("@nomicfoundation/hardhat-toolbox");
@@ -169,7 +117,7 @@ const { MANTLE_SEPOLIA_URL, PRIVATE_KEY, MANTLERSCAN_KEY } = process.env;
 /** @type import('hardhat/config').HardhatUserConfig */
 (
   module.exports = {
-    solidity: "0.8.27",
+    solidity: "0.8.20",
     networks: {
       sepolia: {
         url: MANTLE_SEPOLIA_URL || "",
@@ -183,11 +131,9 @@ const { MANTLE_SEPOLIA_URL, PRIVATE_KEY, MANTLERSCAN_KEY } = process.env;
 );
 ```
 
-##  Write the Deployment Script
+##  Step 6: Write the Deployment Script
 
-Now that your contract is written, and our configuration file is good to go, it’s time to write the contract deploy script.
-
-Navigate to the ignition/modules/mynft.js folder and replace the contents in the file mynft.js with the following:
+- Navigate to ignition/modules and replace the contents of mynft.js with the following:
 ```
 // ignition/modules/mynft.js
 const { buildModule } = require("@nomicfoundation/hardhat-ignition/modules");
@@ -198,33 +144,19 @@ module.exports = buildModule("MyNFTModule", (m) => {
   return { myNFT };
 });
 ```
+- Deploy the contract:
 
-##  Deploy the Contract
-
-We’re finally ready to deploy our smart contract! Navigate back to the root of your project directory, and in the command line run:
 ```
 npx hardhat ignition deploy ./ignition/modules/mynft.js --network sepolia --verify
 ```
 
-You should have an output similar to the one shown below ⬇️
-```
-Deployed Addresses
-
-MyNFTModule#MyNFT - 0xe43e44f3f538Ad10292C5FBE52542aB0D7740599
-```
-
-Now that our contract is deployed, we can go to Mantle Explorer and check if our contract was deployed.
+After deployment, you’ll see an output with the contract address. You can verify it on the Mantle Explorer.
 
 Congrats! You just deployed your NFT smart contract to the Mantle Testnet 🎉 🥳
 
-##  Minting the Deployed NFT
-we accomplished the deployment of a smart contract to Mantle Testnet. Now, it’s time to showcase our web3 expertise by creating an NFT.
+##  Minting the NFT
+- Create a new file in the scripts folder called mintNFT.js with the following code:
 
-## Creating the Mint NFT Script
-
-Navigate to the root of your project directory and create a new file called mintNFT.js in scripts folder. 
-
-Replace the contents of mintNFT.js with the following:
 ```
 require("dotenv").config();
 const { ethers } = require("ethers");
@@ -272,14 +204,23 @@ async function mintNFT() {
 mintNFT();
 ```
 
-We’re all set. Let’s mint our NFT by running the following command:
+## Explanation:
+```
+const tokenUri = "https://gateway.pinata.cloud/ipfs/bafkreiddardzbq6vpcki2nesssxbmev55yutjb2ko5f6rkyaudyc7cue4a";
+```
+is using a tokenUri that points to an asset hosted on Pinata, a platform for managing files on IPFS (InterPlanetary File System).
+
+To use a similar URI for your NFT, you'll need to:
+
+- Create an account on Pinata.
+- Upload your NFT metadata (usually in JSON format) or media files (like images or videos).
+- Once uploaded, Pinata will provide you with an IPFS hash or gateway link, which you can use as your tokenUri in the code.
+
+- Run the script to mint your NFT:
 
 ```
-node scripts/mint-nft.js
+node scripts/mintNFT.js
 ```
-
-You should get an output that looks something like this: “NFT Minted! Check it out at:
-
 Minting NFT...
 Transaction submitted. Waiting for confirmation...
 NFT Minted! Check it out at: https://explorer.testnet.mantle.xyz/tx/0xf0ee9a094c4af94c8aa2d023fbb73419bcd4728e332db803d74bd6df1f3fbe44
